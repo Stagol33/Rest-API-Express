@@ -29,10 +29,13 @@ router.post('/', async (req, res) => {
   try {
     const { firstName, lastName, emailAddress, password } = req.body;
     
-    // Hash password
-    const hashedPassword = bcrypt.hashSync(password, 10);
-		console.log(firstName);
-    const user = await User.create({
+    // Only hash if password exists
+    let hashedPassword;
+    if (password) {
+      hashedPassword = bcrypt.hashSync(password, 10);
+    }
+
+    await User.create({
       firstName,
       lastName,
       emailAddress,
